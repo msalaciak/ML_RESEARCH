@@ -125,3 +125,29 @@ pd.set_option('display.max_columns', None)
 # writer.save()
 #
 
+#cleaning liver function test results.
+
+liver_func = pd.read_excel('clean_Data/DLBCL_BIOCHEM/DLBLC_BIOCHEM_LIVER_v1.xlsx')
+# #Corrects date to proper format
+liver_func['OREDERED_DATE']= pd.to_datetime(liver_func['OREDERED_DATE'], infer_datetime_format=True)
+
+# #rename column
+liver_func.rename(columns={'OREDERED_DATE': 'Test Date'}, inplace=True)
+liver_func.rename(columns={'RES_ID': 'ID'}, inplace=True)
+
+liver_func['RESULT'] = liver_func['RESULT'].str.replace('<','')
+
+print(list(liver_func.columns))
+
+# #make each test_id an individual column
+#
+liver_func = liver_func.pivot_table('RESULT', ['ID', 'ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date'], 'TEST_ID', aggfunc='first')
+liver_func = liver_func.reset_index()
+
+print(liver_func.head(10))
+# # # # creating a list of blank entries , indexNames2 is organized by ORDER column so we can make exclude file, df.drop deletes from this list
+indexNames = liver_func[(liver_func['ALTI'] == '.') & (liver_func['ASTI'] == '.') & (liver_func['BILTI'] == '.')  & (liver_func['GGTI'] == '.')].index
+indexNames2 = liver_func[(liver_func['ALTI'] == '.') & (liver_func['ASTI'] == '.') & (liver_func['BILTI'] == '.')  & (liver_func['GGTI'] == '.')].ORDER_ID
+liver_func.drop(indexNames, inplace=True)
+
+

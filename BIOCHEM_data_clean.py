@@ -127,77 +127,77 @@ pd.set_option('display.max_columns', None)
 
 #cleaning liver function test results.
 
-liver_func = pd.read_excel('clean_Data/DLBCL_BIOCHEM/DLBLC_BIOCHEM_LIVER_v1.xlsx')
-# #Corrects date to proper format
-liver_func['OREDERED_DATE']= pd.to_datetime(liver_func['OREDERED_DATE'], infer_datetime_format=True)
-
-# #rename column
-liver_func.rename(columns={'OREDERED_DATE': 'Test Date'}, inplace=True)
-liver_func.rename(columns={'RES_ID': 'ID'}, inplace=True)
-
-liver_func['RESULT'] = liver_func['RESULT'].str.replace('<','')
-
-print(list(liver_func.columns))
-
-# #make each test_id an individual column
+# liver_func = pd.read_excel('clean_Data/DLBCL_BIOCHEM/DLBLC_BIOCHEM_LIVER_v1.xlsx')
+# # #Corrects date to proper format
+# liver_func['OREDERED_DATE']= pd.to_datetime(liver_func['OREDERED_DATE'], infer_datetime_format=True)
 #
-liver_func = liver_func.pivot_table('RESULT', ['ID', 'ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date'], 'TEST_ID', aggfunc='first')
-liver_func = liver_func.reset_index()
-
-print(liver_func.head(10))
-# # # # creating a list of blank entries , indexNames2 is organized by ORDER column so we can make exclude file, df.drop deletes from this list
-indexNames = liver_func[(liver_func['ALTI'] == '.') & (liver_func['ASTI'] == '.') & (liver_func['BILTI'] == '.')  & (liver_func['GGTI'] == '.')].index
-indexNames2 = liver_func[(liver_func['ALTI'] == '.') & (liver_func['ASTI'] == '.') & (liver_func['BILTI'] == '.')  & (liver_func['GGTI'] == '.')].ORDER_ID
-liver_func.drop(indexNames, inplace=True)
-
-
-
-print(liver_func.isnull().sum())
-liver_func = liver_func.drop(['ASTI'], axis=1)
-liver_func = liver_func.dropna()
-print(liver_func.isnull().sum())
-
-
-#load datasets that contain both crei and glucose
-both_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_RELAPSE.xlsx')
-both_no_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_NO_RELAPSE.xlsx')
-
-both_relapse.fillna(-1,inplace= True)
-both_no_relapse.fillna(-1,inplace= True)
-print(both_relapse.head(1))
-
-#merge liver dataset with crei/glucose (RELAPSE)
-
-merge_all_relapse = pd.merge(liver_func, both_relapse, on='ORDER_ID', how='inner')
-
-# #find out what was excluded from the merge
-exclude_all_relapse = pd.merge(liver_func, both_relapse, on = 'ORDER_ID', how = 'outer', indicator=True)
-exclude_all_relapse = exclude_all_relapse.query('_merge != "both"')
-
-#merge liver dataset with crei/glucose (NON-RELAPSE)
-
-merge_all_nonrelapse = pd.merge(liver_func, both_no_relapse, on='ORDER_ID', how='inner')
-
-# #find out what was excluded from the merge
-exclude_all_nonrelapse = pd.merge(liver_func, both_no_relapse, on = 'ORDER_ID', how = 'outer', indicator=True)
-exclude_all_nonrelapse = exclude_all_nonrelapse.query('_merge != "both"')
-
-#save to excel files
-
-writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/RELAPSE_MERGE_ALL.xlsx', engine='xlsxwriter')
-merge_all_relapse.to_excel(writer, sheet_name='Sheet1')
-writer.save()
-
-writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/RELAPSE_EXCLUDE_ALL.xlsx', engine='xlsxwriter')
-exclude_all_relapse.to_excel(writer, sheet_name='Sheet1')
-writer.save()
-
-writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/NONRELAPSE_MERGE_ALL.xlsx', engine='xlsxwriter')
-merge_all_nonrelapse.to_excel(writer, sheet_name='Sheet1')
-writer.save()
-
-writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/NONRELAPSE_EXCLUDE_ALL.xlsx', engine='xlsxwriter')
-exclude_all_nonrelapse.to_excel(writer, sheet_name='Sheet1')
-writer.save()
-
+# # #rename column
+# liver_func.rename(columns={'OREDERED_DATE': 'Test Date'}, inplace=True)
+# liver_func.rename(columns={'RES_ID': 'ID'}, inplace=True)
+#
+# liver_func['RESULT'] = liver_func['RESULT'].str.replace('<','')
+#
+# print(list(liver_func.columns))
+#
+# # #make each test_id an individual column
+# #
+# liver_func = liver_func.pivot_table('RESULT', ['ID', 'ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date'], 'TEST_ID', aggfunc='first')
+# liver_func = liver_func.reset_index()
+#
+# print(liver_func.head(10))
+# # # # # creating a list of blank entries , indexNames2 is organized by ORDER column so we can make exclude file, df.drop deletes from this list
+# indexNames = liver_func[(liver_func['ALTI'] == '.') & (liver_func['ASTI'] == '.') & (liver_func['BILTI'] == '.')  & (liver_func['GGTI'] == '.')].index
+# indexNames2 = liver_func[(liver_func['ALTI'] == '.') & (liver_func['ASTI'] == '.') & (liver_func['BILTI'] == '.')  & (liver_func['GGTI'] == '.')].ORDER_ID
+# liver_func.drop(indexNames, inplace=True)
+#
+#
+#
+# print(liver_func.isnull().sum())
+# liver_func = liver_func.drop(['ASTI'], axis=1)
+# liver_func = liver_func.dropna()
+# print(liver_func.isnull().sum())
+#
+#
+# #load datasets that contain both crei and glucose
+# both_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_RELAPSE.xlsx')
+# both_no_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_NO_RELAPSE.xlsx')
+#
+# both_relapse.fillna(-1,inplace= True)
+# both_no_relapse.fillna(-1,inplace= True)
+# print(both_relapse.head(1))
+#
+# #merge liver dataset with crei/glucose (RELAPSE)
+#
+# merge_all_relapse = pd.merge(liver_func, both_relapse, on='ORDER_ID', how='inner')
+#
+# # #find out what was excluded from the merge
+# exclude_all_relapse = pd.merge(liver_func, both_relapse, on = 'ORDER_ID', how = 'outer', indicator=True)
+# exclude_all_relapse = exclude_all_relapse.query('_merge != "both"')
+#
+# #merge liver dataset with crei/glucose (NON-RELAPSE)
+#
+# merge_all_nonrelapse = pd.merge(liver_func, both_no_relapse, on='ORDER_ID', how='inner')
+#
+# # #find out what was excluded from the merge
+# exclude_all_nonrelapse = pd.merge(liver_func, both_no_relapse, on = 'ORDER_ID', how = 'outer', indicator=True)
+# exclude_all_nonrelapse = exclude_all_nonrelapse.query('_merge != "both"')
+#
+# #save to excel files
+#
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/RELAPSE_MERGE_ALL.xlsx', engine='xlsxwriter')
+# merge_all_relapse.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+#
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/RELAPSE_EXCLUDE_ALL.xlsx', engine='xlsxwriter')
+# exclude_all_relapse.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+#
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/NONRELAPSE_MERGE_ALL.xlsx', engine='xlsxwriter')
+# merge_all_nonrelapse.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+#
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/NONRELAPSE_EXCLUDE_ALL.xlsx', engine='xlsxwriter')
+# exclude_all_nonrelapse.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+#
 

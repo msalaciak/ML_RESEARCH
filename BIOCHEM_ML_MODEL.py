@@ -97,5 +97,30 @@ import random
 # nonrelapse.to_excel(writer, sheet_name='Sheet1')
 # writer.save()
 
-both_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_RELAPSE.xlsx')
-both_no_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_NO_RELAPSE.xlsx')
+
+#load datasets (liver func / crei / glucose)
+both_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/RELAPSE_MERGE_ALL.xlsx')
+both_no_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/NONRELAPSE_MERGE_ALL.xlsx')
+
+both_relapse = both_relapse.loc[(both_relapse['tests months diagnosis'] >= 0) & (both_relapse['tests weeks prior relapse'] <= 28)]
+both_no_relapse = both_no_relapse.loc[(both_no_relapse['tests months diagnosis'] >= 24)]
+
+
+#drop columns we dont need in our model
+both_relapse = both_relapse.drop(['Unnamed: 0', 'ID_x', 'ORDER_ID', 'CLINIC_ID_x', 'DOCTOR_ID_x', 'ORDERING_WORKSTATION_ID_x',
+                                  'Test Date_x', 'Unnamed: 0.1', 'ID_y', 'CLINIC_ID_y', 'DOCTOR_ID_y',
+                                  'ORDERING_WORKSTATION_ID_y', 'Test Date_y',
+                                  'DATE_DLBCL Diagnosis', 'tests months diagnosis','tests weeks prior relapse','Date Prog after RCHOP for DLBCL'],axis=1)
+both_no_relapse = both_no_relapse.drop(['Unnamed: 0', 'ID_x', 'ORDER_ID', 'CLINIC_ID_x', 'DOCTOR_ID_x', 'ORDERING_WORKSTATION_ID_x',
+                                  'Test Date_x', 'Unnamed: 0.1', 'ID_y', 'CLINIC_ID_y', 'DOCTOR_ID_y',
+                                  'ORDERING_WORKSTATION_ID_y', 'Test Date_y',
+                                  'DATE_DLBCL Diagnosis', 'tests months diagnosis'],axis=1)
+
+#check the right columns are left and there are no NaN values
+print(list(both_no_relapse.columns))
+print(list(both_relapse.columns))
+
+print(both_no_relapse.isnull().sum())
+print(both_relapse.isnull().sum())
+
+

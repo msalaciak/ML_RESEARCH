@@ -151,3 +151,53 @@ indexNames2 = liver_func[(liver_func['ALTI'] == '.') & (liver_func['ASTI'] == '.
 liver_func.drop(indexNames, inplace=True)
 
 
+
+print(liver_func.isnull().sum())
+liver_func = liver_func.drop(['ASTI'], axis=1)
+liver_func = liver_func.dropna()
+print(liver_func.isnull().sum())
+
+
+#load datasets that contain both crei and glucose
+both_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_RELAPSE.xlsx')
+both_no_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_NO_RELAPSE.xlsx')
+
+both_relapse.fillna(-1,inplace= True)
+both_no_relapse.fillna(-1,inplace= True)
+print(both_relapse.head(1))
+
+#merge liver dataset with crei/glucose (RELAPSE)
+
+merge_all_relapse = pd.merge(liver_func, both_relapse, on='ORDER_ID', how='inner')
+
+# #find out what was excluded from the merge
+exclude_all_relapse = pd.merge(liver_func, both_relapse, on = 'ORDER_ID', how = 'outer', indicator=True)
+exclude_all_relapse = exclude_all_relapse.query('_merge != "both"')
+
+#merge liver dataset with crei/glucose (NON-RELAPSE)
+
+merge_all_nonrelapse = pd.merge(liver_func, both_no_relapse, on='ORDER_ID', how='inner')
+
+# #find out what was excluded from the merge
+exclude_all_nonrelapse = pd.merge(liver_func, both_no_relapse, on = 'ORDER_ID', how = 'outer', indicator=True)
+exclude_all_nonrelapse = exclude_all_nonrelapse.query('_merge != "both"')
+
+#save to excel files
+
+writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/RELAPSE_MERGE_ALL.xlsx', engine='xlsxwriter')
+merge_all_relapse.to_excel(writer, sheet_name='Sheet1')
+writer.save()
+
+writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/RELAPSE_EXCLUDE_ALL.xlsx', engine='xlsxwriter')
+exclude_all_relapse.to_excel(writer, sheet_name='Sheet1')
+writer.save()
+
+writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/NONRELAPSE_MERGE_ALL.xlsx', engine='xlsxwriter')
+merge_all_nonrelapse.to_excel(writer, sheet_name='Sheet1')
+writer.save()
+
+writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/NONRELAPSE_EXCLUDE_ALL.xlsx', engine='xlsxwriter')
+exclude_all_nonrelapse.to_excel(writer, sheet_name='Sheet1')
+writer.save()
+
+

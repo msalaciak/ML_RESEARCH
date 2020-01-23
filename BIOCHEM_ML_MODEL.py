@@ -97,3 +97,5 @@ import random
 # nonrelapse.to_excel(writer, sheet_name='Sheet1')
 # writer.save()
 
+both_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_RELAPSE.xlsx')
+both_no_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem relapse - no relapse/DLBCL_BIOCHEM_BOTH_NO_RELAPSE.xlsx')

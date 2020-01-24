@@ -201,3 +201,42 @@ pd.set_option('display.max_columns', None)
 # writer.save()
 #
 
+# CLEANING HBA1C
+##
+###
+####
+##
+#
+
+# progression_info = pd.read_excel('clean_Data/clean merged/primary-join-follow-up.xlsx')
+# print(progression_info.head(10))
+#
+#
+# hba1c = pd.read_excel('clean_data/DLBCL_BIOCHEM/diabetes/DLBCL_HBA1C.xlsx')
+# hba1c['OREDERED_DATE']= pd.to_datetime(hba1c['OREDERED_DATE'], infer_datetime_format=True)
+# hba1c.rename(columns={'OREDERED_DATE': 'Test Date'}, inplace=True)
+# hba1c.rename(columns={'RES_ID': 'ID'}, inplace=True)
+# print(list(hba1c.columns))
+#
+# hba1c = hba1c.pivot_table('RESULT', ['ID', 'ORDER_ID', 'GROUP_TEST_ID','CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date', 'TEST_NAME'], 'TEST_ID', aggfunc='first')
+# hba1c = hba1c.reset_index()
+#
+#
+# print(hba1c.head(10))
+#
+# print(list(hba1c.columns))
+#
+# merge = pd.merge(hba1c, progression_info, on='ID', how='inner')
+#
+# # #find out what was excluded from the merge
+# exclude = pd.merge(hba1c, progression_info, on = 'ID', how = 'outer', indicator=True)
+# exclude = exclude.query('_merge != "both"')
+#
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/diabetes/merged_hba1c_prog_info.xlsx', engine='xlsxwriter')
+# merge.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+#
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/diabetes/excluded_hba1c_prog_info.xlsx', engine='xlsxwriter')
+# exclude.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+

@@ -126,6 +126,14 @@ both_no_relapse = pd.merge(both_no_relapse,no_relapse, on=['ORDER'],how='inner')
 print(list(both_relapse.columns))
 print(list(both_no_relapse.columns))
 
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/ML_MODEL_RELAPSE.xlsx', engine='xlsxwriter')
+# both_relapse.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+#
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/ML_MODEL_NO_RELAPSE.xlsx', engine='xlsxwriter')
+# both_no_relapse.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+
 
 #drop columns we dont need in our model
 both_relapse = both_relapse.drop(['Unnamed: 0_x', 'Unnamed: 0_x', 'ID_x_x', '#_of_Years_tests_post', 'Test_Date_x', 'ORDER',  'Unnamed: 0_y', 'ID_y_x', 'CLINIC_ID_x_x', 'DOCTOR_ID_x_x', 'ORDERING_WORKSTATION_ID_x_x', 'Test_Date_y', 'GLUCOSE_x',  'Date Prog after RCHOP for DLBCL_y', 'DATE_DLBCL Diagnosis_x', 'tests months diagnosis_x', 'tests weeks prior relapse_x', 'Unnamed: 0.1_x', 'ID', 'CLINIC_ID_y_x', 'DOCTOR_ID_y_x', 'ORDERING_WORKSTATION_ID_y_x', 'Test_Date', 'CREI_x', 'Date Prog after RCHOP for DLBCL_x', 'DATE_DLBCL Diagnosis_y', 'tests months diagnosis_y', 'tests weeks prior relapse_x', 'Unnamed: 0_y', 'ID_x_y', 'CLINIC_ID_x_y', 'DOCTOR_ID_x_y', 'ORDERING_WORKSTATION_ID_x_y', 'Test Date_x', 'Unnamed: 0.1_y', 'ID_y_y', 'CLINIC_ID_y_y', 'DOCTOR_ID_y_y', 'ORDERING_WORKSTATION_ID_y_y', 'Test Date_y', 'Progression post RCHOP (yes = 1, no=0)_y', 'Date Prog after RCHOP for DLBCL_y', 'DATE_DLBCL Diagnosis', 'tests months diagnosis', 'tests weeks prior relapse_y']

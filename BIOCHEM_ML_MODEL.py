@@ -104,11 +104,21 @@ both_no_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/MASTER_NONRELAPSE_MERG
 relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/RELAPSE_MERGE_ALL.xlsx')
 no_relapse = pd.read_excel('clean_Data/DLBCL_BIOCHEM/NONRELAPSE_MERGE_ALL.xlsx')
 
-both_relapse = both_relapse.loc[(both_relapse['tests weeks prior relapse'] >= 0) & (both_relapse['tests weeks prior relapse'] <= 56)]
+# both_relapse = both_relapse.loc[(both_relapse['tests weeks prior relapse'] >= 0) & (both_relapse['tests weeks prior relapse'] <= 56)]
+# # both_no_relapse = both_no_relapse.loc[(both_no_relapse['tests months diagnosis'] >= 24)]
+# #
+# # relapse = relapse.loc[(relapse['tests weeks prior relapse'] >= 0) & (both_relapse['tests weeks prior relapse'] <= 56)]
+# # no_relapse = no_relapse.loc[(no_relapse['tests months diagnosis'] >= 24)]
+
+both_relapse = both_relapse.loc[(both_relapse['tests weeks prior relapse'] >= 0) & (both_relapse['tests weeks prior relapse'] <= 28)]
 both_no_relapse = both_no_relapse.loc[(both_no_relapse['tests months diagnosis'] >= 24)]
 
-relapse = relapse.loc[(relapse['tests weeks prior relapse'] >= 0) & (both_relapse['tests weeks prior relapse'] <= 56)]
+relapse = relapse.loc[(relapse['tests weeks prior relapse'] >= 0) & (relapse['tests weeks prior relapse'] <= 28)]
 no_relapse = no_relapse.loc[(no_relapse['tests months diagnosis'] >= 24)]
+
+
+
+
 
 both_relapse =  pd.merge(both_relapse, relapse, on=['ORDER'], how='inner')
 both_no_relapse = pd.merge(both_no_relapse,no_relapse, on=['ORDER'],how='inner')

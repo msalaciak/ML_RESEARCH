@@ -30,40 +30,59 @@ crei_relapse = crei_relapse.loc[(crei_relapse['tests months diagnosis'] >= 0) & 
 crei_no_relapse = crei_no_relapse.loc[(crei_no_relapse['tests months diagnosis'] >= 0) & (crei_no_relapse['tests months diagnosis'] <= 24)]
 
 
+#Patient ID's that have DM2 mentioned plus for loop to drop them from both cohorts
+
+# ID_drop = [100699,141895,260090,292168,318224,357677,398963,628223,642729,971930
+# ,1071523
+# ,1072203
+# ,1124009
+# ,1134912
+# ,1161752
+# ,1382755
+# ,1392776]
+
+# for x in ID_drop:
+#
+#     glucose_no_relapse = glucose_no_relapse[glucose_no_relapse.ID != x]
+#     glucose_relapse = glucose_relapse[glucose_relapse.ID !=x]
+#
+
+
+
 #plotting bloodtests over 24 months vs gluclose levels in both cohorts
 
 #glucose
 #
-plt.figure(figsize=(15,10))
-plt.xticks(range(0, 25))
-ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=None,data=glucose_relapse, legend='full',label="Relapse")
-ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE", estimator=None,data=glucose_no_relapse, legend='full',label="Non-Relapse")
-ax.set_ylabel('Glucose Levels')
-ax.set_xlabel('Blood Test Results Over 24 Months From Initial Diagnosis')
-ax.set_title("No Multi-Data Aggregation")
-plt.axhline(y=11, c='black', linestyle='dashed', label="Glucose Normal Value Limit")
-plt.legend(loc=2,prop={'size': 20})
+# plt.figure(figsize=(15,10))
+# # plt.xticks(range(0, 25))
+# ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=None,data=glucose_relapse, legend='full',label="Relapse")
+# ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE", estimator=None,data=glucose_no_relapse, legend='full',label="Non-Relapse")
+# ax.set_ylabel('Glucose Levels')
+# ax.set_xlabel('Blood Test Results Over 24 Months From Initial Diagnosis')
+# ax.set_title("No Multi-Data Aggregation")
+# plt.axhline(y=11, c='black', linestyle='dashed', label="Glucose Normal Value Limit")
+# plt.legend(loc=2,prop={'size': 20})
+#
+# plt.figure(figsize=(15,10))
+# ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",ci='sd', data=glucose_relapse, legend='full',label="Relapse")
+# ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE", ci='sd',data=glucose_no_relapse, legend='full',label="Non-Relapse")
+# ax.set_ylabel('Glucose Levels')
+# ax.set_xlabel('Blood Test Results Over 24 Months From Initial Diagnosis')
+# ax.set_title("Estimation Mean, Confidence Interval Standard Deviation")
+# plt.axhline(y=11, c='black', linestyle='dashed', label="Glucose Normal Value Limit")
+# plt.legend(loc=2,prop={'size': 20})
+#
+# plt.figure(figsize=(15,10))
+# ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=np.std,ci=95, data=glucose_relapse, legend='full',label="Relapse",color="r")
+# ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=np.std,ci=95,data=glucose_no_relapse, legend='full',label="Non-Relapse",color="b")
+# ax.set_ylabel('Glucose Levels')
+# ax.set_xlabel('Blood Test Results Over 24 Months From Initial Diagnosis')
+# ax.set_title('Estimation Standard Deviation, Confidence Interval 95%')
+# plt.axhline(y=11, c='black', linestyle='dashed', label="Glucose Normal Value Limit")
+# plt.legend(loc=2,prop={'size': 20})
 
 plt.figure(figsize=(15,10))
-ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",ci='sd', data=glucose_relapse, legend='full',label="Relapse")
-ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE", ci='sd',data=glucose_no_relapse, legend='full',label="Non-Relapse")
-ax.set_ylabel('Glucose Levels')
-ax.set_xlabel('Blood Test Results Over 24 Months From Initial Diagnosis')
-ax.set_title("Estimation Mean, Confidence Interval Standard Deviation")
-plt.axhline(y=11, c='black', linestyle='dashed', label="Glucose Normal Value Limit")
-plt.legend(loc=2,prop={'size': 20})
-
-plt.figure(figsize=(15,10))
-ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=np.std,ci=95, data=glucose_relapse, legend='full',label="Relapse",color="r")
-ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=np.std,ci=95,data=glucose_no_relapse, legend='full',label="Non-Relapse",color="b")
-ax.set_ylabel('Glucose Levels')
-ax.set_xlabel('Blood Test Results Over 24 Months From Initial Diagnosis')
-ax.set_title('Estimation Standard Deviation, Confidence Interval 95%')
-plt.axhline(y=11, c='black', linestyle='dashed', label="Glucose Normal Value Limit")
-plt.legend(loc=2,prop={'size': 20})
-
-plt.figure(figsize=(15,10))
-plt.xticks(range(0, 25))
+plt.xticks(range(0, 120))
 ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=np.mean,ci=95, data=glucose_relapse, legend='full',label="Relapse",color="r")
 ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=np.mean,ci=95,data=glucose_no_relapse, legend='full',label="Non-Relapse",color="b")
 ax.set_ylabel('Glucose Levels')
@@ -73,7 +92,7 @@ plt.axhline(y=11, c='black', linestyle='dashed', label="Glucose Normal Value Lim
 plt.legend(loc=2,prop={'size': 20})
 
 
-plt.savefig('GLUCOSE-PLOT.png', dpi=400)
+# plt.savefig('GLUCOSE-PLOT.png', dpi=400)
 plt.show()
 
 

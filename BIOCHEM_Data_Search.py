@@ -41,12 +41,20 @@ crei_no_relapse = crei_no_relapse.loc[(crei_no_relapse['tests months diagnosis']
 # ,1382755
 # ,1392776]
 
+#removing these patients from the peak
+ID_drop=  [202862,292168,318224,353974,357677,358598,398963,951650,972548,1134912,1382755,1392776]
+
 # for x in ID_drop:
-#
+#     print("Xtzrt")
 #     glucose_no_relapse = glucose_no_relapse[glucose_no_relapse.ID != x]
 #     glucose_relapse = glucose_relapse[glucose_relapse.ID !=x]
 #
+#     print("done")
 
+glucose_no_relapse = glucose_no_relapse[~glucose_no_relapse.ID.isin(ID_drop)]
+glucose_relapse = glucose_relapse[~glucose_relapse.ID.isin(ID_drop)]
+
+print("Exit")
 
 
 #plotting bloodtests over 24 months vs gluclose levels in both cohorts

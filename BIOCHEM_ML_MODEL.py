@@ -135,44 +135,71 @@ print(list(both_no_relapse.columns))
 # writer.save()
 
 
-#drop columns we dont need in our model
-both_relapse = both_relapse.drop(['Unnamed: 0_x', 'Unnamed: 0_x', 'ID_x_x', '#_of_Years_tests_post', 'Test_Date_x', 'ORDER',  'Unnamed: 0_y', 'ID_y_x', 'CLINIC_ID_x_x', 'DOCTOR_ID_x_x', 'ORDERING_WORKSTATION_ID_x_x', 'Test_Date_y', 'GLUCOSE_x',  'Date Prog after RCHOP for DLBCL_y', 'DATE_DLBCL Diagnosis_x', 'tests months diagnosis_x', 'tests weeks prior relapse_x', 'Unnamed: 0.1_x', 'ID', 'CLINIC_ID_y_x', 'DOCTOR_ID_y_x', 'ORDERING_WORKSTATION_ID_y_x', 'Test_Date', 'CREI_x', 'Date Prog after RCHOP for DLBCL_x', 'DATE_DLBCL Diagnosis_y', 'tests months diagnosis_y', 'tests weeks prior relapse_x', 'Unnamed: 0_y', 'ID_x_y', 'CLINIC_ID_x_y', 'DOCTOR_ID_x_y', 'ORDERING_WORKSTATION_ID_x_y', 'Test Date_x', 'Unnamed: 0.1_y', 'ID_y_y', 'CLINIC_ID_y_y', 'DOCTOR_ID_y_y', 'ORDERING_WORKSTATION_ID_y_y', 'Test Date_y', 'Progression post RCHOP (yes = 1, no=0)_y', 'Date Prog after RCHOP for DLBCL_y', 'DATE_DLBCL Diagnosis', 'tests months diagnosis', 'tests weeks prior relapse_y']
+
+both_relapse = both_relapse.drop(['Unnamed: 0_x', 'Unnamed: 0_x', 'ID_x_x', '#_of_Years_tests_post',   'Unnamed: 0_y', 'ID_y_x', 'CLINIC_ID_x_x', 'DOCTOR_ID_x_x', 'ORDERING_WORKSTATION_ID_x_x', 'Test_Date_y', 'GLUCOSE_x',  'Date Prog after RCHOP for DLBCL_y', 'DATE_DLBCL Diagnosis_x', 'tests months diagnosis_x', 'tests weeks prior relapse_x', 'Unnamed: 0.1_x', 'ID', 'CLINIC_ID_y_x', 'DOCTOR_ID_y_x', 'ORDERING_WORKSTATION_ID_y_x', 'Test_Date', 'CREI_x', 'Date Prog after RCHOP for DLBCL_x', 'DATE_DLBCL Diagnosis_y', 'tests months diagnosis_y', 'tests weeks prior relapse_x', 'Unnamed: 0_y', 'ID_x_y', 'CLINIC_ID_x_y', 'DOCTOR_ID_x_y', 'ORDERING_WORKSTATION_ID_x_y', 'Test Date_x', 'Unnamed: 0.1_y', 'ID_y_y', 'CLINIC_ID_y_y', 'DOCTOR_ID_y_y', 'ORDERING_WORKSTATION_ID_y_y', 'Test Date_y', 'Progression post RCHOP (yes = 1, no=0)_y', 'Date Prog after RCHOP for DLBCL_y', 'DATE_DLBCL Diagnosis', 'tests months diagnosis', 'tests weeks prior relapse_y']
 ,axis=1)
 
-both_no_relapse = both_no_relapse.drop(['Unnamed: 0_x', 'Unnamed: 0_x', 'ID_x_x', 'DATE_DLBCL Diagnosis_x', 'Test_Date_x', '#_of_Years_tests_post', 'ORDER', 'Unnamed: 0_y', 'ID_y_x', 'CLINIC_ID_x_x', 'DOCTOR_ID_x_x', 'ORDERING_WORKSTATION_ID_x_x', 'Test_Date_y', 'GLUCOSE_x', 'DATE_DLBCL Diagnosis_y', 'tests months diagnosis_x', 'Unnamed: 0.1_x', 'ID', 'CLINIC_ID_y_x', 'DOCTOR_ID_y_x', 'ORDERING_WORKSTATION_ID_y_x', 'Test_Date', 'CREI_x', 'DATE_DLBCL Diagnosis_x', 'tests months diagnosis_x', 'Unnamed: 0_y', 'ID_x_y', 'CLINIC_ID_x_y', 'DOCTOR_ID_x_y', 'ORDERING_WORKSTATION_ID_x_y', 'Test Date_x',  'Unnamed: 0.1_y', 'ID_y_y', 'CLINIC_ID_y_y', 'DOCTOR_ID_y_y', 'ORDERING_WORKSTATION_ID_y_y', 'Test Date_y', 'Progression post RCHOP (yes = 1, no=0)_y', 'DATE_DLBCL Diagnosis_y', 'tests months diagnosis_y']
+both_no_relapse = both_no_relapse.drop(['Unnamed: 0_x', 'Unnamed: 0_x', 'ID_x_x', 'DATE_DLBCL Diagnosis_x', '#_of_Years_tests_post', 'Unnamed: 0_y', 'ID_y_x', 'CLINIC_ID_x_x', 'DOCTOR_ID_x_x', 'ORDERING_WORKSTATION_ID_x_x', 'Test_Date_y', 'GLUCOSE_x', 'DATE_DLBCL Diagnosis_y', 'tests months diagnosis_x', 'Unnamed: 0.1_x', 'ID', 'CLINIC_ID_y_x', 'DOCTOR_ID_y_x', 'ORDERING_WORKSTATION_ID_y_x', 'Test_Date', 'CREI_x', 'DATE_DLBCL Diagnosis_x', 'tests months diagnosis_x', 'Unnamed: 0_y', 'ID_x_y', 'CLINIC_ID_x_y', 'DOCTOR_ID_x_y', 'ORDERING_WORKSTATION_ID_x_y', 'Test Date_x',  'Unnamed: 0.1_y', 'ID_y_y', 'CLINIC_ID_y_y', 'DOCTOR_ID_y_y', 'ORDERING_WORKSTATION_ID_y_y', 'Test Date_y', 'Progression post RCHOP (yes = 1, no=0)_y', 'DATE_DLBCL Diagnosis_y', 'tests months diagnosis_y']
 ,axis=1)
 
-both_relapse.rename(columns={'GLUCOSE_y': 'GLUCOSE'}, inplace=True)
-both_no_relapse.rename(columns={'GLUCOSE_y': 'GLUCOSE'}, inplace=True)
-both_relapse.rename(columns={'CREI_y': 'CREI'}, inplace=True)
-both_no_relapse.rename(columns={'CREI_y': 'CREI'}, inplace=True)
-# #
-# # #check the right columns are left and there are no NaN values
-both_relapse = both_relapse.loc[:,~both_relapse.columns.duplicated()]
-both_no_relapse = both_no_relapse.loc[:,~both_no_relapse.columns.duplicated()]
+
+print(both_no_relapse.shape)
+print(both_relapse.shape)
+
+biochem_sod =  pd.read_excel('clean_Data/DLBCL_BIOCHEM/sod-al-cal-cleaned.xlsx')
+
+both_relapse =  pd.merge(both_relapse, biochem_sod, on=['ORDER'], how='inner')
+both_no_relapse = pd.merge(both_no_relapse,biochem_sod, on=['ORDER'],how='inner')
+
+print(both_no_relapse.shape)
+print(both_relapse.shape)
 
 
 print(list(both_relapse.columns))
 print(list(both_no_relapse.columns))
 
+#drop columns we dont need in our model
+both_relapse = both_relapse.drop([ 'Test_Date_x_x'  ,'ORDER', 'Unnamed: 0', 'index', 'ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test_Date_x_y']
+,axis=1)
+
+both_no_relapse = both_no_relapse.drop([ 'Test_Date_x_x' ,'ORDER' , 'Unnamed: 0', 'index', 'ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test_Date_x_y']
+,axis=1)
+
+print(list(both_relapse.columns))
+print(list(both_no_relapse.columns))
+both_relapse.rename(columns={'GLUCOSE_y': 'GLUCOSE'}, inplace=True)
+both_no_relapse.rename(columns={'GLUCOSE_y': 'GLUCOSE'}, inplace=True)
+both_relapse.rename(columns={'CREI_y': 'CREI'}, inplace=True)
+both_no_relapse.rename(columns={'CREI_y': 'CREI'}, inplace=True)
+# # #
+# # # #check the right columns are left and there are no NaN values
+both_relapse = both_relapse.loc[:,~both_relapse.columns.duplicated()]
+both_no_relapse = both_no_relapse.loc[:,~both_no_relapse.columns.duplicated()]
 
 
-# #
+#
+#
+print(list(both_relapse.columns))
+print(list(both_no_relapse.columns))
+#
+#
+#
+# # #
 print(both_no_relapse.isnull().sum())
 print(both_relapse.isnull().sum())
-# #
+# # #
 dataset=pd.concat([both_no_relapse, both_relapse], ignore_index=True, sort=False)
 # #
 # # print(dataset.shape)
 # # print(dataset.head(1))
 # # print("#########################")
-# #
+# # #
 # # #splitting the dataset into x and y datasets
-x_dataset = dataset.iloc[:, 1:22]
+x_dataset = dataset.iloc[:, 1:25]
 y_dataset= dataset.iloc[:, 0:1]
 print(x_dataset)
 print(y_dataset)
-# #
+# # #
 print(x_dataset.isnull().sum())
 # #
 # # null_columns=x_dataset.columns[x_dataset.isnull().any()]
@@ -181,15 +208,15 @@ print(x_dataset.isnull().sum())
 #saving names of features and classes
 feature_names = x_dataset.columns
 class_names = y_dataset.columns
-# # #
-# # #
-# # # x_dataset["ALTI"] = pd.to_numeric(x_dataset["ALTI"],errors='coerce')
-# # # x_dataset["BILTI"] = pd.to_numeric(x_dataset["BILTI"],errors='coerce')
-# # # x_dataset["GGTI"] = pd.to_numeric(x_dataset["GGTI"],errors='coerce')
-# # #
-# # #
-# # #
 # #
+# #
+# # x_dataset["ALTI"] = pd.to_numeric(x_dataset["ALTI"],errors='coerce')
+# # x_dataset["BILTI"] = pd.to_numeric(x_dataset["BILTI"],errors='coerce')
+# # x_dataset["GGTI"] = pd.to_numeric(x_dataset["GGTI"],errors='coerce')
+# #
+# #
+# #
+#
 # # #preparing the data for the ML model
 x_dataset =x_dataset.to_numpy()
 y_dataset=y_dataset.to_numpy()
@@ -295,7 +322,7 @@ plt.xlim([0, 1])
 plt.ylim([0, 1])
 plt.ylabel('True Positive Rate')
 plt.xlabel('False Positive Rate')
-plt.savefig('BIOCHEM ALL VALUES ML-MODEL-auc - accuracy.png', dpi=400)
+plt.savefig('BIOCHEM ALL VALUES WITH CAL ML-MODEL-auc - accuracy.png', dpi=400)
 plt.show()
 
 importances = clf.feature_importances_
@@ -318,7 +345,7 @@ plt.bar(range(X_test.shape[1]), importances[indices],
 plt.xticks(range(X_test.shape[1]), feature_names[indices])
 plt.xlim([-1, X_test.shape[1]])
 plt.ylabel('Feature Importance')
-plt.savefig('BIOCHEM ALL VALUES ML-MODEL-feature_importance - accuracy.png', dpi=400)
+plt.savefig('BIOCHEM ALL VALUES WITH CAL ML-MODEL-feature_importance - accuracy.png', dpi=400)
 plt.show()
 
 

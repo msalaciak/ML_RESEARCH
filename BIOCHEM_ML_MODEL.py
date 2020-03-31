@@ -295,7 +295,7 @@ plt.xlim([0, 1])
 plt.ylim([0, 1])
 plt.ylabel('True Positive Rate')
 plt.xlabel('False Positive Rate')
-plt.savefig('BILCHEM ALL VALUES ML-MODEL-auc - accuracy.png', dpi=400)
+plt.savefig('BIOCHEM ALL VALUES ML-MODEL-auc - accuracy.png', dpi=400)
 plt.show()
 
 importances = clf.feature_importances_

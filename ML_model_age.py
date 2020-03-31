@@ -21,8 +21,8 @@ import seaborn as sns
 from sklearn.tree import export_graphviz
 import random
 
-relapse = pd.read_excel('clean_Data/relapse-non-relapse/Progression_Blood_RES_DAY_CLEAN_AGE.xlsx')
-nonrelapse = pd.read_excel('clean_Data/relapse-non-relapse/NO_Progression_Blood_RES_DAY_CLEAN_AGE.xlsx')
+relapse = pd.read_excel('clean_Data/relapse-non-relapse/Progression_Blood_RES_DAY_CLEAN_AGE_DAYS.xlsx')
+nonrelapse = pd.read_excel('clean_Data/relapse-non-relapse/NO_Progression_Blood_RES_DAY_CLEAN_AGE_DAYS.xlsx')
 
 relapse = relapse.loc[(relapse['#_of_Years_tests_post'] >= 0) & (relapse['#_of_Years_tests_post'] <= 28)]
 nonrelapse = nonrelapse.loc[(nonrelapse['#_of_Years_tests_post'] >= 24)]
@@ -175,7 +175,7 @@ plt.xlim([0, 1])
 plt.ylim([0, 1])
 plt.ylabel('True Positive Rate')
 plt.xlabel('False Positive Rate')
-plt.savefig('ML-MODEL-auc - AGE - accuracy.png', dpi=400)
+# plt.savefig('ML-MODEL-auc - AGE_days - accuracy.png', dpi=400)
 plt.show()
 
 importances = clf.feature_importances_
@@ -198,7 +198,7 @@ plt.bar(range(X_test.shape[1]), importances[indices],
 plt.xticks(range(X_test.shape[1]), feature_names[indices])
 plt.xlim([-1, X_test.shape[1]])
 plt.ylabel('Feature Importance')
-plt.savefig('ML-MODEL-feature_importance - AGE - accuracy.png', dpi=400)
+# plt.savefig('ML-MODEL-feature_importance - AGE_days - accuracy.png', dpi=400)
 plt.show()
 
 

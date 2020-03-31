@@ -24,25 +24,25 @@ crei_no_relapse.fillna(-1,inplace=True)
 
 
 #only looking at the data that shows test results between 0 and 24 months of diagnosis
-glucose_relapse = glucose_relapse.loc[(glucose_relapse['tests months diagnosis'] >= 0) & (glucose_relapse['tests months diagnosis'] <= 24)]
-glucose_no_relapse = glucose_no_relapse.loc[(glucose_no_relapse['tests months diagnosis'] >= 0) & (glucose_no_relapse['tests months diagnosis'] <= 24)]
+glucose_relapse = glucose_relapse.loc[(glucose_relapse['tests months diagnosis'] >= 0) & (glucose_relapse['tests months diagnosis'] <= 168)]
+glucose_no_relapse = glucose_no_relapse.loc[(glucose_no_relapse['tests months diagnosis'] >= 0) & (glucose_no_relapse['tests months diagnosis'] <= 168)]
 crei_relapse = crei_relapse.loc[(crei_relapse['tests months diagnosis'] >= 0) & (crei_relapse['tests months diagnosis'] <= 24)]
 crei_no_relapse = crei_no_relapse.loc[(crei_no_relapse['tests months diagnosis'] >= 0) & (crei_no_relapse['tests months diagnosis'] <= 24)]
 
 
 #Patient ID's that have DM2 mentioned plus for loop to drop them from both cohorts
 
-# ID_drop = [100699,141895,260090,292168,318224,357677,398963,628223,642729,971930
-# ,1071523
-# ,1072203
-# ,1124009
-# ,1134912
-# ,1161752
-# ,1382755
-# ,1392776]
+ID_drop = [100699,141895,260090,292168,318224,357677,398963,628223,642729,971930
+,1071523
+,1072203
+,1124009
+,1134912
+,1161752
+,1382755
+,1392776,1431309]
 
 #removing these patients from the peak
-ID_drop=  [202862,292168,318224,353974,357677,358598,398963,951650,972548,1134912,1382755,1392776]
+ID_drop2=  [202862,292168,318224,353974,357677,358598,398963,951650,972548,1134912,1382755,1392776]
 
 # for x in ID_drop:
 #     print("Xtzrt")
@@ -53,6 +53,9 @@ ID_drop=  [202862,292168,318224,353974,357677,358598,398963,951650,972548,113491
 
 glucose_no_relapse = glucose_no_relapse[~glucose_no_relapse.ID.isin(ID_drop)]
 glucose_relapse = glucose_relapse[~glucose_relapse.ID.isin(ID_drop)]
+
+# glucose_no_relapse = glucose_no_relapse[~glucose_no_relapse.ID.isin(ID_drop2)]
+# glucose_relapse = glucose_relapse[~glucose_relapse.ID.isin(ID_drop2)]
 
 print("Exit")
 
@@ -90,7 +93,7 @@ print("Exit")
 # plt.legend(loc=2,prop={'size': 20})
 
 plt.figure(figsize=(15,10))
-plt.xticks(range(0, 120))
+# plt.xticks(range(0, 120))
 ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=np.mean,ci=95, data=glucose_relapse, legend='full',label="Relapse",color="r")
 ax = sns.lineplot(x="tests months diagnosis", y="GLUCOSE",estimator=np.mean,ci=95,data=glucose_no_relapse, legend='full',label="Non-Relapse",color="b")
 ax.set_ylabel('Glucose Levels')
@@ -100,7 +103,7 @@ plt.axhline(y=11, c='black', linestyle='dashed', label="Glucose Normal Value Lim
 plt.legend(loc=2,prop={'size': 20})
 
 
-# plt.savefig('GLUCOSE-PLOT.png', dpi=400)
+plt.savefig('GLUCOSE-PLOT-NO-DM2-all_dates.png', dpi=400)
 plt.show()
 
 

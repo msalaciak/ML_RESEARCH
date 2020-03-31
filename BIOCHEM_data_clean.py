@@ -5,25 +5,25 @@ pd.set_option('display.max_columns', None)
 #///////// THIS SECTION IS FOR CLEANING DATA FRAMES
 
 #Load dataframes from excel file into pandas
-
+#
 # biochem = pd.read_excel('clean_Data/DLBCL_BIOCHEM/DLBCL_BIOCHEM_v2.xlsx')
-# progression_info = pd.read_excel('clean_Data/clean merged/primary-join-follow-up.xlsx')
-#
-# #Corrects date to proper format
+# # progression_info = pd.read_excel('clean_Data/clean merged/primary-join-follow-up.xlsx')
+# #
+# # #Corrects date to proper format
 # biochem['OREDERED_DATE']= pd.to_datetime(biochem['OREDERED_DATE'], infer_datetime_format=True)
-#
-# #rename column
+# #
+# # #rename column
 # biochem.rename(columns={'OREDERED_DATE': 'Test Date'}, inplace=True)
 # biochem.rename(columns={'RES_ID': 'ID'}, inplace=True)
-#
-#
-# #make each test_id an individual column
-#
+# #
+# #
+# # #make each test_id an individual column
+# #
 # biochem = biochem.pivot_table('RESULT', ['ID', 'ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date'], 'TEST_ID', aggfunc='first')
 # biochem = biochem.reset_index()
-#
-#
-# # print(df.head(10))
+# #
+# #
+# print(biochem.head(10))
 #
 # # # # creating a list of blank entries , indexNames2 is organized by ORDER column so we can make exclude file, df.drop deletes from this list
 # indexNames = biochem[(biochem['CREI'] == '.') & (biochem['GLUI'] == '.') & (biochem['GLUII'] == '.')].index
@@ -240,3 +240,46 @@ pd.set_option('display.max_columns', None)
 # exclude.to_excel(writer, sheet_name='Sheet1')
 # writer.save()
 
+
+# SODIUM AL CAL CLEANING
+
+
+biochem = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem_cal_al_sod.xlsx')
+
+#
+# #Corrects date to proper format
+biochem['OREDERED_DATE']= pd.to_datetime(biochem['OREDERED_DATE'], infer_datetime_format=True)
+#
+# #rename column
+biochem.rename(columns={'OREDERED_DATE': 'Test Date'}, inplace=True)
+biochem.rename(columns={'RES_ID': 'ID'}, inplace=True)
+#
+#
+# #make each test_id an individual column
+#
+biochem = biochem.pivot_table('RESULT', ['ID', 'ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date'], 'TEST_NAME', aggfunc='first')
+biochem = biochem.reset_index()
+#
+
+print(biochem.head(10))
+print(biochem.shape)
+
+# dropping blank entries
+indexNames = biochem[(biochem['Albumin'] == '.') & (biochem['Calcium'] == '.') & (biochem['Sodium'] == '.')].index
+indexNames2 = biochem[(biochem['Albumin'] == '.') & (biochem['Calcium'] == '.') & (biochem['Sodium'] == '.')].ORDER_ID
+biochem.drop(indexNames, inplace=True)
+print(biochem.head(10))
+print(biochem.shape)
+
+biochem["Albumin"] = pd.to_numeric(biochem["Albumin"], errors='coerce')
+biochem["Calcium"] = pd.to_numeric(biochem["Calcium"], errors='coerce')
+biochem["Sodium"] = pd.to_numeric(biochem["Sodium"], errors='coerce')
+
+biochem = biochem.dropna()
+biochem = biochem.reset_index()
+print(biochem.head(10))
+print(biochem.shape)
+
+writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/sod-al-cal-cleaned.xlsx', engine='xlsxwriter')
+biochem.to_excel(writer, sheet_name='Sheet1')
+writer.save()

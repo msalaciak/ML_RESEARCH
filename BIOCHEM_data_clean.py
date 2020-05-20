@@ -288,16 +288,19 @@ pd.set_option('display.max_columns', None)
 # quick script to check missing entries for chemo / weight start dates.
 relapse = pd.read_excel('clean_data/CLEAN_Progression.xlsx')
 nonrelapse = pd.read_excel('clean_data/CLEAN__NON_Progression.xlsx')
-chemo  = pd.read_excel('RES_ID_DLBCL_IPI_chemodates.xlsx')
+chemo = pd.read_excel('RES_ID_DLBCL_IPI_chemodates.xlsx')
 
 
 
 
-excludeProg = pd.merge(relapse, chemo, on = 'ID', how = 'outer', indicator=True)
-excludeProg = excludeProg.query('_merge != "both"')
+# excludeProg = pd.merge(relapse, chemo, on = 'ID', how = 'outer', indicator=True)
+# excludeProg = excludeProg.query('_merge != "both"')
+#
+# excludeNON = pd.merge(nonrelapse, chemo, on = 'ID', how = 'outer', indicator=True)
+# excludeNON = excludeNON.query('_merge != "both"')
 
-excludeNON = pd.merge(nonrelapse, chemo, on = 'ID', how = 'outer', indicator=True)
-excludeNON = excludeNON.query('_merge != "both"')
+excludeNON = nonrelapse.merge(chemo, how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only']
+excludeProg = relapse.merge(chemo, how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only']
 
 
 excludeNON = excludeNON['ID']
@@ -316,3 +319,7 @@ writer.save()
 writer = pd.ExcelWriter('clean_Data/chemo_dates_missing_non.xlsx', engine='xlsxwriter')
 excludeNON.to_excel(writer, sheet_name='Sheet1')
 writer.save()
+
+
+
+

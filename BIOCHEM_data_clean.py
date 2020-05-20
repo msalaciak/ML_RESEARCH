@@ -244,42 +244,75 @@ pd.set_option('display.max_columns', None)
 # SODIUM AL CAL CLEANING
 
 
-biochem = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem_cal_al_sod.xlsx')
-
+# biochem = pd.read_excel('clean_Data/DLBCL_BIOCHEM/biochem_cal_al_sod.xlsx')
 #
-# #Corrects date to proper format
-biochem['OREDERED_DATE']= pd.to_datetime(biochem['OREDERED_DATE'], infer_datetime_format=True)
+# #
+# # #Corrects date to proper format
+# biochem['OREDERED_DATE']= pd.to_datetime(biochem['OREDERED_DATE'], infer_datetime_format=True)
+# #
+# # #rename column
+# biochem.rename(columns={'OREDERED_DATE': 'Test Date'}, inplace=True)
+# biochem.rename(columns={'RES_ID': 'ID'}, inplace=True)
+# #
+# #
+# # #make each test_id an individual column
+# #
+# biochem = biochem.pivot_table('RESULT', ['ID', 'ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date'], 'TEST_NAME', aggfunc='first')
+# biochem = biochem.reset_index()
+# #
 #
-# #rename column
-biochem.rename(columns={'OREDERED_DATE': 'Test Date'}, inplace=True)
-biochem.rename(columns={'RES_ID': 'ID'}, inplace=True)
+# print(biochem.head(10))
+# print(biochem.shape)
 #
+# # dropping blank entries
+# indexNames = biochem[(biochem['Albumin'] == '.') & (biochem['Calcium'] == '.') & (biochem['Sodium'] == '.')].index
+# indexNames2 = biochem[(biochem['Albumin'] == '.') & (biochem['Calcium'] == '.') & (biochem['Sodium'] == '.')].ORDER_ID
+# biochem.drop(indexNames, inplace=True)
+# print(biochem.head(10))
+# print(biochem.shape)
 #
-# #make each test_id an individual column
+# biochem["Albumin"] = pd.to_numeric(biochem["Albumin"], errors='coerce')
+# biochem["Calcium"] = pd.to_numeric(biochem["Calcium"], errors='coerce')
+# biochem["Sodium"] = pd.to_numeric(biochem["Sodium"], errors='coerce')
 #
-biochem = biochem.pivot_table('RESULT', ['ID', 'ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date'], 'TEST_NAME', aggfunc='first')
-biochem = biochem.reset_index()
+# biochem = biochem.dropna()
+# biochem = biochem.reset_index()
+# print(biochem.head(10))
+# print(biochem.shape)
 #
+# writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/sod-al-cal-cleaned.xlsx', engine='xlsxwriter')
+# biochem.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
 
-print(biochem.head(10))
-print(biochem.shape)
 
-# dropping blank entries
-indexNames = biochem[(biochem['Albumin'] == '.') & (biochem['Calcium'] == '.') & (biochem['Sodium'] == '.')].index
-indexNames2 = biochem[(biochem['Albumin'] == '.') & (biochem['Calcium'] == '.') & (biochem['Sodium'] == '.')].ORDER_ID
-biochem.drop(indexNames, inplace=True)
-print(biochem.head(10))
-print(biochem.shape)
+# quick script to check missing entries for chemo / weight start dates.
+relapse = pd.read_excel('clean_data/CLEAN_Progression.xlsx')
+nonrelapse = pd.read_excel('clean_data/CLEAN__NON_Progression.xlsx')
+chemo  = pd.read_excel('RES_ID_DLBCL_IPI_chemodates.xlsx')
 
-biochem["Albumin"] = pd.to_numeric(biochem["Albumin"], errors='coerce')
-biochem["Calcium"] = pd.to_numeric(biochem["Calcium"], errors='coerce')
-biochem["Sodium"] = pd.to_numeric(biochem["Sodium"], errors='coerce')
 
-biochem = biochem.dropna()
-biochem = biochem.reset_index()
-print(biochem.head(10))
-print(biochem.shape)
 
-writer = pd.ExcelWriter('clean_Data/DLBCL_BIOCHEM/sod-al-cal-cleaned.xlsx', engine='xlsxwriter')
-biochem.to_excel(writer, sheet_name='Sheet1')
+
+excludeProg = pd.merge(relapse, chemo, on = 'ID', how = 'outer', indicator=True)
+excludeProg = excludeProg.query('_merge != "both"')
+
+excludeNON = pd.merge(nonrelapse, chemo, on = 'ID', how = 'outer', indicator=True)
+excludeNON = excludeNON.query('_merge != "both"')
+
+
+excludeNON = excludeNON['ID']
+excludeProg = excludeProg['ID']
+
+
+excludeNON = excludeNON.drop_duplicates()
+excludeProg = excludeProg.drop_duplicates()
+
+
+
+writer = pd.ExcelWriter('clean_Data/chemo_dates_missing_prog.xlsx', engine='xlsxwriter')
+excludeProg.to_excel(writer, sheet_name='Sheet1')
+writer.save()
+
+writer = pd.ExcelWriter('clean_Data/chemo_dates_missing_non.xlsx', engine='xlsxwriter')
+excludeNON.to_excel(writer, sheet_name='Sheet1')
 writer.save()

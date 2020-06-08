@@ -20,7 +20,7 @@ pd.set_option('display.max_rows', None)
 # writer.save()
 
 bmiCalc = pd.read_excel('clean_Data/chemo_date_ipi_join_non_relapse.xlsx')
-
+dm2 = pd.read_excel('clean_data/IPI_CHEMO/first_occur_dm2_non_relapse_ipi_bmi.xlsx')
 
 
 #iterate over rows of dataframe, see the value of bmi and assign the classification and risk
@@ -47,6 +47,14 @@ for index,row in bmiCalc.iterrows():
 
 
 
-writer = pd.ExcelWriter('clean_Data/chemo_date_ipi_join_bmi_calc.xlsx', engine='xlsxwriter')
-bmiCalc.to_excel(writer, sheet_name='Sheet1')
-writer.save()
+# writer = pd.ExcelWriter('clean_Data/chemo_date_ipi_join_bmi_calc.xlsx', engine='xlsxwriter')
+# bmiCalc.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+
+bmiCalc = bmiCalc[['RES_ID','IPI_DX','BMI','Classification','Risk']]
+print(bmiCalc.head(1))
+newJoin = pd.merge(bmiCalc,dm2,on='RES_ID')
+#
+# writer = pd.ExcelWriter('clean_Data/ipi_first_dm2_bmi.xlsx', engine='xlsxwriter')
+# newJoin.to_excel(writer, sheet_name='Sheet1')
+# writer.save()

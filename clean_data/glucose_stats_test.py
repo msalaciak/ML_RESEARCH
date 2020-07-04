@@ -47,15 +47,13 @@ nodm2.drop_duplicates(subset ="RES_ID",
                      keep = 'first', inplace = True)
 
 print("over 7.7 ",dm2.shape)
-print("under 7.7 " , nodm2.shape)
+print("under 7.7 " , nodm2.shape,"\n")
 
 print("over 7.7 mean bmi: ", dm2["BMI"].mean())
 print("under 7.7 mean bmi: ", nodm2["BMI"].mean())
 
 print("over 7.7 std bmi: ", dm2["BMI"].std())
-print("under 7.7 std bmi: ", nodm2["BMI"].std())
-
-
+print("under 7.7 std bmi: ", nodm2["BMI"].std(),"\n")
 
 
 
@@ -63,20 +61,116 @@ print("over 7.7 mean ipi: ", dm2["IPI_DX"].mean())
 print("under 7.7 mean ipi: ", nodm2["IPI_DX"].mean())
 
 print("over 7.7 std ipi: ", dm2["IPI_DX"].std())
-print("under 7.7 std ipi: ", nodm2["IPI_DX"].std())
+print("under 7.7 std ipi: ", nodm2["IPI_DX"].std(),"\n")
+
+
+print("over 7.7 mean Classification: ", dm2["class_cat"].mean())
+print("under 7.7 mean Classification: ", nodm2["class_cat"].mean())
+
+print("over 7.7 std Classification: ", dm2["class_cat"].std())
+print("under 7.7 std Classification: ", nodm2["class_cat"].std(),"\n")
+
+print("over 7.7 mean Risk Cat: ", dm2["Risk_Cat"].mean())
+print("under 7.7 mean Risk Cat: ", nodm2["Risk_Cat"].mean())
+
+print("over 7.7 std Risk Cat: ", dm2["Risk_Cat"].std())
+print("under 7.7 std Risk Cat: ", nodm2["Risk_Cat"].std(),"\n")
+
+print("over 7.7 mean Risk Ord: ", dm2["Risk_ord"].mean())
+print("under 7.7 mean Risk Ord: ", nodm2["Risk_ord"].mean())
+
+print("over 7.7 std Risk Ord: ", dm2["Risk_ord"].std())
+print("under 7.7 std Risk Ord: ", nodm2["Risk_ord"].std(),"\n")
+
+print("BMI: \n")
+
+ztest ,pval = stests.ztest(x1=dm2['BMI'], x2=nodm2['BMI'], value=0,alternative='two-sided')
+print("p-value z-test ",float(pval))
+if pval<0.05:
+    print("reject null hypothesis \n")
+else:
+    print("accept null hypothesis \n")
+
+
+
+ttest,pval = ttest_ind(dm2['BMI'],nodm2['BMI'])
+print("p-value t test",pval)
+if pval <0.05:
+  print("we reject null hypothesis\n")
+else:
+  print("we accept null hypothesis\n")
+
+print("IPI_DX: \n")
 
 ztest ,pval = stests.ztest(x1=dm2['IPI_DX'], x2=nodm2['IPI_DX'], value=0,alternative='two-sided')
 print("p-value z-test ",float(pval))
 if pval<0.05:
-    print("reject null hypothesis")
+    print("reject null hypothesis \n")
 else:
-    print("accept null hypothesis")
+    print("accept null hypothesis \n")
 
 
 
-ttest,pval1 = ttest_ind(dm2['IPI_DX'],nodm2['IPI_DX'])
-print("p-value t test",pval1)
-if pval1 <0.05:
-  print("we reject null hypothesis")
+ttest,pval = ttest_ind(dm2['IPI_DX'],nodm2['IPI_DX'])
+print("p-value t test",pval)
+if pval <0.05:
+  print("we reject null hypothesis\n")
 else:
-  print("we accept null hypothesis")
+  print("we accept null hypothesis\n")
+
+
+
+print("RISK_CAT: \n")
+
+
+ztest ,pval = stests.ztest(x1=dm2['Risk_Cat'], x2=nodm2['Risk_Cat'], value=0,alternative='two-sided')
+print("p-value z-test ",float(pval))
+if pval<0.05:
+    print("reject null hypothesis \n")
+else:
+    print("accept null hypothesis \n")
+
+
+
+ttest,pval = ttest_ind(dm2['Risk_Cat'],nodm2['Risk_Cat'])
+print("p-value t test",pval)
+if pval <0.05:
+  print("we reject null hypothesis\n")
+else:
+  print("we accept null hypothesis\n")
+
+print("RISK_ORD: \n")
+
+ztest ,pval = stests.ztest(x1=dm2['Risk_ord'], x2=nodm2['Risk_ord'], value=0,alternative='two-sided')
+print("p-value z-test ",float(pval))
+if pval<0.05:
+    print("reject null hypothesis \n")
+else:
+    print("accept null hypothesis \n")
+
+
+
+ttest,pval = ttest_ind(dm2['Risk_ord'],nodm2['Risk_ord'])
+print("p-value t test",pval)
+if pval <0.05:
+  print("we reject null hypothesis\n")
+else:
+  print("we accept null hypothesis\n")
+
+print("CLASS_CAT: \n")
+
+ztest ,pval = stests.ztest(x1=dm2['class_cat'], x2=nodm2['class_cat'], value=0,alternative='two-sided')
+print("p-value z-test ",float(pval))
+if pval<0.05:
+    print("reject null hypothesis \n")
+else:
+    print("accept null hypothesis \n")
+
+
+
+ttest,pval = ttest_ind(dm2['class_cat'],nodm2['class_cat'])
+print("p-value t test",pval)
+if pval <0.05:
+  print("we reject null hypothesis\n")
+else:
+  print("we accept null hypothesis\n")

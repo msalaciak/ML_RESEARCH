@@ -64,25 +64,27 @@ gluc = pd.read_excel('clean_data/glui_chemh_only.xlsx')
 ipi = pd.read_excel('clean_data/ipi_dm2_non_relapse_bmi.xlsx')
 
 
-ipi = ipi.drop(columns=['ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date', 'GLUCOSE',  'tests months diagnosis', 'test days diagnosis',  'Unnamed: 15', 'Unnamed: 16'])
+# ipi = ipi.drop(columns=['ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'Test Date', 'GLUCOSE',  'tests months diagnosis', 'test days diagnosis',  'Unnamed: 15', 'Unnamed: 16'])
+#
+# #merge together
+# newJoin = pd.merge(gluc, ipi, on='RES_ID')
+#
+# print(newJoin.head(10))
+#
+# newJoin = newJoin.drop_duplicates(subset ='ORDER_ID',
+#                      keep = "first")
+# print(newJoin.head(10))
+#
+# chemo_dates = pd.read_excel('clean_data/IPI_CHEMO/RES_ID_DLBCL_IPI_chemodates_updated.xlsx')
+#
+# chemo_dates = chemo_dates.drop(columns=['disease', 'extranodal', 'location', 'IPI', 'Stage',  'ECOG', 'weight kg (at last chemo)', 'height (cm)', '#cycles completed', 'radiation', 'history of DM2', 'Unnamed: 15'])
+# print(list(chemo_dates.columns))
+#
+# newJoin1 = pd.merge(newJoin, chemo_dates, on='RES_ID')
+#
+# writer = pd.ExcelWriter('clean_Data/ipi_first_dm2_bmi_chemh_only_chemo_dates.xlsx', engine='xlsxwriter')
+# newJoin1.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
 
-#merge together
-newJoin = pd.merge(gluc, ipi, on='RES_ID')
-
-print(newJoin.head(10))
-
-newJoin = newJoin.drop_duplicates(subset ='ORDER_ID',
-                     keep = "first")
-print(newJoin.head(10))
-
-chemo_dates = pd.read_excel('clean_data/IPI_CHEMO/RES_ID_DLBCL_IPI_chemodates_updated.xlsx')
-
-chemo_dates = chemo_dates.drop(columns=['disease', 'extranodal', 'location', 'IPI', 'Stage',  'ECOG', 'weight kg (at last chemo)', 'height (cm)', '#cycles completed', 'radiation', 'history of DM2', 'Unnamed: 15'])
-print(list(chemo_dates.columns))
-
-newJoin1 = pd.merge(newJoin, chemo_dates, on='RES_ID')
-
-writer = pd.ExcelWriter('clean_Data/ipi_first_dm2_bmi_chemh_only_chemo_dates.xlsx', engine='xlsxwriter')
-newJoin1.to_excel(writer, sheet_name='Sheet1')
-writer.save()
-
+#add more chemh data to the glucose values
+gluc = pd.read_excel('clean_data/glui_chemh_only.xlsx')

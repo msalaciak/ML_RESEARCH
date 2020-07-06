@@ -299,27 +299,53 @@ chemo = pd.read_excel('RES_ID_DLBCL_IPI_chemodates.xlsx')
 # excludeNON = pd.merge(nonrelapse, chemo, on = 'ID', how = 'outer', indicator=True)
 # excludeNON = excludeNON.query('_merge != "both"')
 
-excludeNON = nonrelapse.merge(chemo, how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only']
-excludeProg = relapse.merge(chemo, how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only']
+# excludeNON = nonrelapse.merge(chemo, how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only']
+# excludeProg = relapse.merge(chemo, how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only']
+#
+#
+# excludeNON = excludeNON['ID']
+# excludeProg = excludeProg['ID']
+#
+#
+# excludeNON = excludeNON.drop_duplicates()
+# excludeProg = excludeProg.drop_duplicates()
+#
+#
+#
+# writer = pd.ExcelWriter('clean_Data/chemo_dates_missing_prog.xlsx', engine='xlsxwriter')
+# excludeProg.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
+#
+# writer = pd.ExcelWriter('clean_Data/chemo_dates_missing_non.xlsx', engine='xlsxwriter')
+# excludeNON.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
 
 
-excludeNON = excludeNON['ID']
-excludeProg = excludeProg['ID']
+#CHEM H CLEANING
+# chemh = pd.read_excel('clean_data/DLBCL_BIOCHEM/chem_h_only.xlsx')
+# glucose_filled = pd.read_excel('clean_data/gluc_stats_filled.xlsx')
+#
+#
+# print(chemh.head(10))
+#
+# chemh = chemh.pivot_table('RESULT', ['RES_ID', 'ORDER_ID', 'CLINIC_ID', 'DOCTOR_ID', 'ORDERING_WORKSTATION_ID', 'OREDERED_DATE'], 'TEST_ID', aggfunc='first')
+# chemh = chemh.reset_index()
+#
+# print(chemh.head(10))
+#
+#
+#
+# join = pd.merge(chemh,glucose_filled,on=['RES_ID','ORDER_ID'])
+#
+# writer = pd.ExcelWriter('clean_Data/chemh_full_tests.xlsx', engine='xlsxwriter')
+# join.to_excel(writer, sheet_name='Sheet1')
+# writer.save()
 
+chemh = pd.read_excel('clean_data/chemh_full_tests_clean.xlsx')
+print(chemh.head(10))
+chemh['OREDERED_DATE']= pd.to_datetime(chemh['OREDERED_DATE'], infer_datetime_format=True)
+print(chemh.head(10))
 
-excludeNON = excludeNON.drop_duplicates()
-excludeProg = excludeProg.drop_duplicates()
-
-
-
-writer = pd.ExcelWriter('clean_Data/chemo_dates_missing_prog.xlsx', engine='xlsxwriter')
-excludeProg.to_excel(writer, sheet_name='Sheet1')
+writer = pd.ExcelWriter('clean_Data/chemh_full_tests_clean.xlsx', engine='xlsxwriter')
+chemh.to_excel(writer, sheet_name='Sheet1')
 writer.save()
-
-writer = pd.ExcelWriter('clean_Data/chemo_dates_missing_non.xlsx', engine='xlsxwriter')
-excludeNON.to_excel(writer, sheet_name='Sheet1')
-writer.save()
-
-
-
-

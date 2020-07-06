@@ -346,6 +346,33 @@ print(chemh.head(10))
 chemh['OREDERED_DATE']= pd.to_datetime(chemh['OREDERED_DATE'], infer_datetime_format=True)
 print(chemh.head(10))
 
-writer = pd.ExcelWriter('clean_Data/chemh_full_tests_clean.xlsx', engine='xlsxwriter')
+# # #all IDS of patients who have glucose over 7.7
+IDS = [31692, 38309, 73998, 80182, 120281, 132169, 134159, 138663, 152609, 169163, 174503, 177039, 202862, 209211, 224504,
+       225344, 248356, 278467, 293070, 357200, 358598, 366744, 383572, 410704, 476176, 506702, 510815, 519302, 529134,
+       550102, 551241, 631717, 649128, 649881, 709607, 711866, 818008, 848066, 916969, 923521, 951190, 951650, 963948,
+       970198, 972548, 973749, 976141, 1014270, 1022485, 1071857, 1073446, 1072382, 1086241, 1088452, 1086461, 1089394,
+       1108538, 1112846, 1110718, 1111687, 1111911, 1114608, 1131588, 1128826, 1129603, 1137356, 1151809, 1152165,
+       1156765, 1186741, 1202062, 1213896, 1218461, 1246774, 1247563, 1267589, 1271382, 1298079, 1313367, 1321225,
+       1337240, 1345658, 1350999, 1359008, 1394869, 1431309, 1507198, 1519413]
+# #
+
+
+
+
+for id in IDS:
+    over = True
+    for index,row in chemh.iterrows():
+        if row.Over_7_7 == 1 and id==row.RES_ID and over and row.GLUI >= 7.7:
+            chemh.at[index, 'Over_7_7'] = 1
+            print("---------------------------------------INSIDE")
+            over = False
+        elif row.Over_7_7 == 1 and id==row.RES_ID and row.GLUI < 7.7:
+            chemh.at[index, 'Over_7_7'] = 0
+            print("------------------------- OUTSIDE")
+
+
+
+
+writer = pd.ExcelWriter('clean_Data/chemh_full_tests_clean_cox.xlsx', engine='xlsxwriter')
 chemh.to_excel(writer, sheet_name='Sheet1')
 writer.save()

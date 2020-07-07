@@ -4,6 +4,10 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 from scipy.stats import ttest_ind
 from statsmodels.stats import weightstats as stests
+from lifelines import CoxPHFitter
+from lifelines import KaplanMeierFitter
+import matplotlib.pyplot as plt
+
 
 
 # #Load dataframes from excel file into pandas
@@ -173,5 +177,27 @@ if pval <0.05:
   print("we reject null hypothesis\n")
 else:
   print("we accept null hypothesis\n")
+
+
+
+#loading dataset ready for cox hazard
+coxdata = pd.read_excel('chemh_full_tests_clean_cox_test_clean.xlsx')
+
+
+
+print(coxdata.head(2))
+
+# coxdata.drop('BMI', axis=1, inplace=True)
+# coxdata.drop('GLUI', axis=1, inplace=True)
+
+print(coxdata.head(2))
+
+cph = CoxPHFitter()
+cph.fit(coxdata, duration_col='event_in_weeks', event_col='Over_7_7',show_progress=True,step_size=0.2)
+
+cph.print_summary()  # access the results using cph.summary
+cph.plot()
+plt.show()
+
 
 

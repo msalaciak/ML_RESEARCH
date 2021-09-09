@@ -7,6 +7,9 @@ from statsmodels.stats import weightstats as stests
 from lifelines import CoxPHFitter
 from lifelines import KaplanMeierFitter
 import matplotlib.pyplot as plt
+from scipy import stats
+
+
 
 
 
@@ -187,8 +190,10 @@ coxdata = pd.read_excel('chemh_full_tests_clean_cox_test_clean.xlsx')
 
 print(coxdata.head(2))
 
-# coxdata.drop('BMI', axis=1, inplace=True)
-# coxdata.drop('GLUI', axis=1, inplace=True)
+coxdata.drop('BMI', axis=1, inplace=True)
+coxdata.drop('Classification', axis=1, inplace=True)
+coxdata.drop('Risk', axis=1, inplace=True)
+coxdata.drop('GLUI', axis=1, inplace=True)
 
 print(coxdata.head(2))
 
@@ -198,6 +203,4 @@ cph.fit(coxdata, duration_col='event_in_weeks', event_col='Over_7_7',show_progre
 cph.print_summary()  # access the results using cph.summary
 cph.plot()
 plt.show()
-
-
 
